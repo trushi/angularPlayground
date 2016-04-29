@@ -23,25 +23,18 @@ System.register(['angular2/core', 'app/components/bossy.autocomplete '], functio
         execute: function() {
             App = (function () {
                 function App() {
-                    this.myConfig = bossy_autocomplete_1.Config;
                 }
-                App.prototype.ngOnInit = function () {
-                    this.myConfig = {
-                        'align': '',
-                        'color': '',
-                        'icon': '',
-                        'iconFloat': '',
-                        'persists': false,
-                        'position': '',
-                        'progress': 0,
-                        'text': 'This is a test again',
-                        'type': ''
-                    };
-                };
                 App = __decorate([
                     core_1.Component({
                         selector: 'my-app',
-                        template: "\n\t\t<div>Not here</div>\n\t\t<bossy-autocomplete  [config]=\"myConfig\"><span>Autocomplete Testing!</span></bossy-autocomplete >\n\t",
+                        /*	template: `
+                                <div>Not here</div>
+                                <bossy-autocomplete  [config]="myConfig"><span>Autocomplete Testing!</span></bossy-autocomplete >
+                            ,
+                            directives: [BossyAutocomplete]
+                        */
+                        //template: '<p>hello W</p>'
+                        template: "<p>hello W</p><bossy-autocomplete></bossy-autocomplete>",
                         directives: [bossy_autocomplete_1.BossyAutocomplete]
                     }), 
                     __metadata('design:paramtypes', [])

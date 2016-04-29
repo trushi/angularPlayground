@@ -14,12 +14,39 @@ export interface BossyAutocompleteConfig {
 
 @Component({
     selector: 'bossy-autocomplete',
-    templateUrl: 'app/components/bossy-autocomplete.html',
-    inputs: ['config'],
-    styleUrls: ['app/components/_bossy-autocomplete.css']
+template: `<div>
+        <input [(ngModel)]="query" (keypress)="updateSuggestions(query)">
+        <div *ngFor="#sug of suggestions" (click)="chooseSuggestion($sug)">{{sug}}</div>
+        </div>`
+        
+     //   inputs: ['config'],
+   // styleUrls: ['app/components/_bossy-autocomplete.css']
 })
 
 export class BossyAutocomplete {
+    //var BossyAutocomplete;
+
+    updateSuggestions(query) {
+        console.log('test');
+                var startsWithMatches = utility.filterStartsWith(scope.dict, query, true),
+                    correctionMatches = scope.tree.query(query, scope.maxCorrections);
+                if (query.length > 0) {
+                    // ng-repeat doesn't work with Sets
+                    scope.suggestions = Array.from(new Set(startsWithMatches.concat(correctionMatches)));
+                }
+                else {
+                    scope.suggestions = [];
+                }
+            };
+
+            chooseSuggestion(suggestion) {
+                scope.query = suggestion;
+                scope.updateSuggestions(suggestion);
+            };
+
+/*
+
+
     public config: BossyAutocompleteConfig;
 
     createMatrix(x,y){
@@ -107,11 +134,36 @@ export class BossyAutocomplete {
             }
         }
     };
+    function buildBKTree(dict: string) {
+        let i, root = dict.length > 0 ? new BKTreeNode(dict[0]) : null;
+        for (i = 1; i < dict.length; i++) {
+            root.add(new BKTreeNode(dict[i]));
+        }
+        return root;
+    }
 
+    function searchBKTree(root, query, tolerance) {
+        let dist, matchObj = {}, matches = [];
+        for (dist = 0; dist <= tolerance; dist++) {
+            matchObj[dist] = [];
+        }
+        root.search(query, tolerance, matchObj);
+        for (dist = 0; dist <= tolerance; dist++) {
+            matches = matches.concat(matchObj[dist]);
+        }
+        return matches;
+    }
 
+    return function (dict) {
+        this._root = buildBKTree(dict);
+        this.query = function (query, tolerance) {
+            return this._root ? searchBKTree(this._root, query, tolerance) : [];
+        };
+    };
+    */
     
 }
-function Autocomplete(BKTree, utility) {
+function Autocomplete(BKTree, utility) {/*
     return {
         restrict: 'E',
         replace: true,
@@ -142,4 +194,5 @@ function Autocomplete(BKTree, utility) {
             };
         },        
     };
+    */
 }
