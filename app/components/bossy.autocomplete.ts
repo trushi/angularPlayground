@@ -15,8 +15,8 @@ export interface BossyAutocompleteConfig {
 @Component({
     selector: 'bossy-autocomplete',
 template: `<div>
-        <input [(ngModel)]="query" (keypress)="updateSuggestions(query)">
-        <div *ngFor="#sug of suggestions" (click)="chooseSuggestion($sug)">{{sug}}</div>
+        <input [(ngModel)]="query" (keyup)="foo()">
+        <div *ngFor="#sug of suggestions" (click)="chooseSuggestion(sug)">{{sug}}</div>
         </div>`
         
      //   inputs: ['config'],
@@ -25,14 +25,19 @@ template: `<div>
 
 export class BossyAutocomplete {
     //var BossyAutocomplete;
+    query: string;
+
+    foo($event) {
+        console.log('bar', $event, this.query);
+    }
 
     updateSuggestions(query) {
-        console.log('test');
+        console.log('test',query);
                 var startsWithMatches = utility.filterStartsWith(scope.dict, query, true),
                     correctionMatches = scope.tree.query(query, scope.maxCorrections);
                 if (query.length > 0) {
                     // ng-repeat doesn't work with Sets
-                    scope.suggestions = Array.from(new Set(startsWithMatches.concat(correctionMatches)));
+                    //scope.suggestions = Array.from(new Set(startsWithMatches.concat(correctionMatches)));
                 }
                 else {
                     scope.suggestions = [];
@@ -43,10 +48,11 @@ export class BossyAutocomplete {
                 scope.query = suggestion;
                 scope.updateSuggestions(suggestion);
             };
-                   createMatrix(x,y){
-             let i, mat = new Array(x);
+
+            createMatrix(x,y){
+             //let i, mat = new Array(x);
                 for (i = 0; i < x; i++) {
-                    mat[i] = new Array(y);
+               //     mat[i] = new Array(y);
                 }
                 return mat;
             };
@@ -95,34 +101,14 @@ export class BossyAutocomplete {
         return mat[str1.length - 1][str2.length - 1];
     }
 
-
 /*
 
 
     public config: BossyAutocompleteConfig;
 
-    createMatrix(x,y){
-        let i, mat = new Array(x);
-            for (i = 0; i < x; i++) {
-                mat[i] = new Array(y);
-        }
-        return mat;
-    };
+    
 
-    filterStartsWith(words, query, caseInsensitive){
-        let compare;
-        if (caseInsensitive) {
-            compare = function (w) {
-                return w.toLowerCase().startsWith(query.toLowerCase());
-            };
-        }
-        else {
-            compare = function (w) {
-                return w.startsWith(query)
-            };
-        }
-        return words.filter(compare);
-    };
+   
     function levDist(str1, str2 : string) {
         let i, j, mat = utility.createMatrix(str1.length + 1, str2.length + 1);
         // More readable if strings are 1-indexed

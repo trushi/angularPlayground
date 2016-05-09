@@ -12,6 +12,35 @@ System.register(['angular2/core'], function(exports_1, context_1) {
     };
     var core_1;
     var BossyAutocomplete;
+    function levDist(str1, str2) {
+        var i, j, mat = utility.createMatrix(str1.length + 1, str2.length + 1);
+        // More readable if strings are 1-indexed
+        // lower case for case-insensitive matching
+        str1 = ' ' + str1.toLowerCase();
+        str2 = ' ' + str2.toLowerCase();
+        // Initialize first row values to edit distance from empty string
+        for (i = 0; i < str1.length; i++) {
+            mat[i][0] = i;
+        }
+        // Initialize first column values to edit distance from empty string
+        for (j = 0; j < str2.length; j++) {
+            mat[0][j] = j;
+        }
+        // Flood fill mat with edit distances between substrs of str1/str2
+        for (j = 1; j < str2.length; j++) {
+            for (i = 1; i < str1.length; i++) {
+                if (str1[i] === str2[j]) {
+                    mat[i][j] = mat[i - 1][j - 1];
+                }
+                else {
+                    mat[i][j] = Math.min(mat[i - 1][j] + 1, // a deletion
+                    mat[i][j - 1] + 1, // an insertion
+                    mat[i - 1][j - 1] + 1); // a substitution
+                }
+            }
+        }
+        return mat[str1.length - 1][str2.length - 1];
+    }
     function Autocomplete(BKTree, utility) {
     }
     return {
@@ -23,13 +52,13 @@ System.register(['angular2/core'], function(exports_1, context_1) {
             BossyAutocomplete = (function () {
                 function BossyAutocomplete() {
                 }
-                //var BossyAutocomplete;
+                BossyAutocomplete.prototype.foo = function ($event) {
+                    console.log('bar', $event, this.query);
+                };
                 BossyAutocomplete.prototype.updateSuggestions = function (query) {
-                    console.log('test');
+                    console.log('test', query);
                     var startsWithMatches = utility.filterStartsWith(scope.dict, query, true), correctionMatches = scope.tree.query(query, scope.maxCorrections);
                     if (query.length > 0) {
-                        // ng-repeat doesn't work with Sets
-                        scope.suggestions = Array.from(new Set(startsWithMatches.concat(correctionMatches)));
                     }
                     else {
                         scope.suggestions = [];
@@ -41,10 +70,32 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                     scope.updateSuggestions(suggestion);
                 };
                 ;
+                BossyAutocomplete.prototype.createMatrix = function (x, y) {
+                    //let i, mat = new Array(x);
+                    for (i = 0; i < x; i++) {
+                    }
+                    return mat;
+                };
+                ;
+                BossyAutocomplete.prototype.filterStartsWith = function (words, query, caseInsensitive) {
+                    var compare;
+                    if (caseInsensitive) {
+                        compare = function (w) {
+                            return w.toLowerCase().startsWith(query.toLowerCase());
+                        };
+                    }
+                    else {
+                        compare = function (w) {
+                            return w.startsWith(query);
+                        };
+                    }
+                    return words.filter(compare);
+                };
+                ;
                 BossyAutocomplete = __decorate([
                     core_1.Component({
                         selector: 'bossy-autocomplete',
-                        template: "<div>\n        <input [(ngModel)]=\"query\" (keypress)=\"updateSuggestions(query)\">\n        <div *ngFor=\"#sug of suggestions\" (click)=\"chooseSuggestion($sug)\">{{sug}}</div>\n        </div>"
+                        template: "<div>\n        <input [(ngModel)]=\"query\" (keyup)=\"foo()\">\n        <div *ngFor=\"#sug of suggestions\" (click)=\"chooseSuggestion(sug)\">{{sug}}</div>\n        </div>"
                     }), 
                     __metadata('design:paramtypes', [])
                 ], BossyAutocomplete);

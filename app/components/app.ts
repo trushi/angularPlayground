@@ -3,34 +3,12 @@ import {BossyAutocomplete} from 'app/components/bossy.autocomplete '
 
 @Component({
 	selector: 'my-app',
-/*	template: `
-		<div>Not here</div>
-		<bossy-autocomplete  [config]="myConfig"><span>Autocomplete Testing!</span></bossy-autocomplete >
-	,
-	directives: [BossyAutocomplete]
-*/
 //template: '<p>hello W</p>'
-template: `<p>hello W</p><bossy-autocomplete></bossy-autocomplete>`,
-directives: [BossyAutocomplete]
+template: `<p>hello W</p>` //<bossy-autocomplete></bossy-autocomplete>`,
+//directives: [BossyAutocomplete]
 
 
 })
 
-export class App implements OnInit{
-	//myConfig: BossyAutocomplete Config;
-/*
-	ngOnInit() {
-		this.myConfig = {
-			'align': '',
-			'color': '',
-			'icon': '',
-			'iconFloat': '',
-			'persists': false,
-			'position': '',
-			'progress': 0,
-			'text': 'This is a test again',
-			'type': ''
-		};
-	}
-	*/
+export class App {
 }
